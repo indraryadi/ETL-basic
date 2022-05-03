@@ -25,8 +25,7 @@ def insert_raw_data_to_mysql():
     engine.dispose()
     
     
-    
-        
+#continue to Transform data
         
         
 if __name__=='__main__':
