@@ -12,7 +12,7 @@ def read_credentials():
 
 def raw_category(engine):
     try:
-        jsonList=['CA_category_id.json','DE_category_id.json','FR_category_id.json','GB_category_id.json','IN_category_id.json','US_category_id.json']
+        jsonList=['CA_category_id.json','DE_category_id.json','GB_category_id.json','IN_category_id.json','US_category_id.json']
         
         df=pd.DataFrame(pd.read_json('data/{}'.format(jsonList[0])))
         
@@ -34,7 +34,7 @@ def raw_category(engine):
         
 def raw_videos(engine):
     try:    
-        videoList=['CAvideos.csv','DEvideos.csv','FRvideos.csv',
+        videoList=['CAvideos.csv','DEvideos.csv',
           'GBvideos.csv','INvideos.csv','USvideos.csv']
         df=pd.DataFrame(pd.read_csv('data/{}'.format(videoList[0]),encoding="UTF-8"))
         
@@ -59,9 +59,12 @@ def insert_raw_data_to_mysql():
     cfg=read_credentials()['mysql_lake']
     mysql_auth=MySQL(cfg)
     engine,engine_conn=mysql_auth.conn()
-    
-    raw_videos(engine)
-    # raw_category(engine)        
+    try:
+        raw_videos(engine)
+        raw_category(engine)
+        print("Success !!!")
+    except (Exception) as e:
+        print(e)        
     
     
 #continue to Transform data
