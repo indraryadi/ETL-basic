@@ -52,9 +52,24 @@ def dim_country():
     dim_country=pd.DataFrame(temp)
     return dim_country
     
+def dim_channel():
+    df=pd.DataFrame(df_video.drop_duplicates('channel_title'))
+    filt=df['channel_title']
+    temp=[]
+    
+    # fil=(df_video['channel_title']=='EminemVEVO')
+    # b=df_video.loc[fil,['country_code']].drop_duplicates('country_code')
+    
+    for i in range(1,len(filt)):
+        temp.append({"id":i,"channel_name":filt.iloc[i]})
+    temp=pd.DataFrame(temp)
+    
+    return temp
 if __name__=="__main__":
-    a=dim_category()
-    b=dim_country()
-    # print(b)
-    # a.to_csv("d.csv",index=False)
-    # print(len(a))
+    # a=dim_category()
+    # b=dim_country()
+    c=dim_channel()
+    
+    # print(len(df_video['country_code'].str.contains("CA")))
+    # df=pd.read_csv('data/CAvideos.csv')
+    print(c.tail(5))
