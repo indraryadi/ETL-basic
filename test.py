@@ -101,5 +101,4 @@ if __name__=="__main__":
     # d=dim_video()
     # e=dim_time()
     
-    # print(e.columns)
     # print(e.tail(5))
