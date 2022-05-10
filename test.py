@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import json
-from pytz import country_names
 
 import sqlalchemy
 from connections.mysql import MySQL
@@ -21,9 +20,10 @@ def dim_category():
     df=df_category['items']
     temp=[]
     for i in range(len(df)):        
-        temp.append({"id":df[i]['id'],"category":df[i]['snippet']['title']})
+        temp.append({"category_id":df[i]['id'],"category":df[i]['snippet']['title']})
     temp=pd.DataFrame(temp)
-    dim_category=temp.drop_duplicates('id')
+    dim_category=temp.drop_duplicates('category_id')
+    dim_category['category_id']=dim_category['category_id'].astype('int')
     return dim_category
 
 #TRANSFORM TO DIM COUNTRY
@@ -47,7 +47,7 @@ def dim_country():
                 country_name="India"
             case 'US':
                 country_name="USA" 
-        temp.append({"id":filt[i],"country_name":country_name})
+        temp.append({"country_code":filt[i],"country_name":country_name})
     dim_country=pd.DataFrame(temp)
     return dim_country
   
@@ -58,10 +58,10 @@ def dim_channel():
     temp=[]
     
     # fil=(df_video['channel_title']=='EminemVEVO')
-    # b=df_video.loc[fil,['country_code']].drop_duplicates('country_code')
+    # b=df_video.loc[fil,['channel_title']].drop_duplicates('channel_title')
     
-    for i in range(1,len(filt)):
-        temp.append({"id":i,"channel_name":filt.iloc[i]})
+    for i in range(0,len(filt)):
+        temp.append({"id_channel":i+1,"channel_title":filt.iloc[i]})
     temp=pd.DataFrame(temp)
     
     return temp
@@ -81,24 +81,68 @@ def dim_video():
 
 def dim_time():
     
-    column=['date','day','month','year']
+    column=['trending_date','day','month','year']
     
     df=df_video.drop_duplicates('trending_date')
     filt=df['trending_date']
-    temp=filt.str.replace('.','-',regex=False)
-    
     new_df=pd.DataFrame(columns=column)
-    new_df['date']=pd.DataFrame(["20"+x[0:2]+"-"+x[6:]+"-"+x[3:5] for x in temp])
+    # temp=filt.str.replace('.','-',regex=False)
+    
+    
+    # new_df['date']=pd.DataFrame(["20"+x[0:2]+"-"+x[6:]+"-"+x[3:5] for x in temp])
+    # new_df['day']=pd.DataFrame([x[3:5] for x in temp])
+    # new_df['month']=pd.DataFrame([x[6:] for x in temp])
+    # new_df['year']=pd.DataFrame(["20"+x[0:2] for x in temp])
+    
+    
+    # temp=filt.str.replace('.','.',regex=False)
+    temp=filt
+    new_df['trending_date']=pd.DataFrame([x for x in temp])
     new_df['day']=pd.DataFrame([x[3:5] for x in temp])
     new_df['month']=pd.DataFrame([x[6:] for x in temp])
     new_df['year']=pd.DataFrame(["20"+x[0:2] for x in temp])
     
     return new_df
+
+
+def fact_video():
+    data=df_video
+    
+    column=['video_id','id_channel','id_category','country_code','trending_date']
+    df=pd.DataFrame(columns=column)
+    category=0
+    
+    df_v=dim_video()
+    df_channel=dim_channel()
+    df_country=dim_country()
+    df_category=dim_category()
+    df_time=dim_time()
+    temp=data.merge(df_v,on='video_id')\
+             .merge(df_channel,on='channel_title')\
+             .merge(df_country,on='country_code')\
+             .merge(df_category,on='category_id')\
+            .merge(df_time,on='trending_date')
+    # temp2=data['channel_title'].isin(df_channel['channel_title'])
+    # df['id_channel']=
+    df['video_id']=temp['video_id']
+    df['id_channel']=temp['id_channel']
+    df['country_code']=temp['country_code']
+    df['id_category']=temp['category_id']
+    df['trending_date']=temp['trending_date']
+    return df
+    
+
 if __name__=="__main__":
     # a=dim_category()
     # b=dim_country()
     # c=dim_channel()
     # d=dim_video()
     # e=dim_time()
+    f=fact_video()
     
-    # print(e.tail(5))
+    print(len(f))
+    print(len(df_video))
+    print(f.tail(5))
+    # print(e)
+    # filt=(f['video_id']=='jY7XC5iY3ck') #n1WpP7iowLc
+    # print(f.loc[filt,['date']].value_counts())
