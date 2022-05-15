@@ -19,11 +19,13 @@ df_video=pd.read_sql(sql='raw_videos',con=engine)
 def dim_category():
     df=df_category['items']
     temp=[]
+    pd.options.mode.chained_assignment = None
     for i in range(len(df)):        
         temp.append({"category_id":df[i]['id'],"category":df[i]['snippet']['title']})
     temp=pd.DataFrame(temp)
     dim_category=temp.drop_duplicates('category_id')
-    dim_category['category_id']=dim_category['category_id'].astype('int')
+    # a=.copy()
+    dim_category.loc[:,'category_id']=dim_category.loc[:,'category_id'].astype('int')
     return dim_category
 
 #TRANSFORM TO DIM COUNTRY
@@ -108,7 +110,7 @@ def dim_time():
 def fact_video():
     data=df_video
     
-    column=['video_id','id_channel','id_category','country_code','trending_date']
+    column=['video_id','id_channel','id_category','country_code','trending_date','views','likes','dislikes']
     df=pd.DataFrame(columns=column)
     category=0
     
@@ -129,11 +131,14 @@ def fact_video():
     df['country_code']=temp['country_code']
     df['id_category']=temp['category_id']
     df['trending_date']=temp['trending_date']
+    df['views']=temp['views']
+    df['likes']=temp['likes']
+    df['dislikes']=temp['dislikes']
     return df
     
 
 if __name__=="__main__":
-    # a=dim_category()
+    a=dim_category()
     # b=dim_country()
     # c=dim_channel()
     # d=dim_video()
@@ -142,7 +147,8 @@ if __name__=="__main__":
     
     print(len(f))
     print(len(df_video))
-    print(f.tail(5))
-    # print(e)
-    # filt=(f['video_id']=='jY7XC5iY3ck') #n1WpP7iowLc
+    # print(f.head(5))
+    # print(a)
+    filt=(f['video_id']=='n1WpP7iowLc') # jY7XC5iY3ck 
+    print(f.loc[filt].sort_values(by='views'))
     # print(f.loc[filt,['date']].value_counts())
