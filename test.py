@@ -1,3 +1,4 @@
+from unicodedata import name
 import pandas as pd
 import numpy as np
 import json
@@ -141,14 +142,25 @@ if __name__=="__main__":
     a=dim_category()
     # b=dim_country()
     # c=dim_channel()
-    # d=dim_video()
+    d=dim_video()
     # e=dim_time()
     f=fact_video()
     
     print(len(f))
     print(len(df_video))
-    # print(f.head(5))
-    # print(a)
-    filt=(f['video_id']=='n1WpP7iowLc') # jY7XC5iY3ck 
-    print(f.loc[filt].sort_values(by='views'))
-    # print(f.loc[filt,['date']].value_counts())
+    # print(f.sort_values(by=['video_id','id_channel','trending_date']))
+    
+    filt=(f['video_id']=='jY7XC5iY3ck') #n1WpP7iowLc  
+    # print(f.loc[filt].sort_values(by='views'))
+    # print(f.loc[filt,['trending_date']].value_counts())
+    # filt2=(d['video_id']=='jY7XC5iY3ck')
+    # print(d.loc[filt2])
+    
+    filt3=(f.value_counts()>1)
+    filt4=(filt3.value_counts())
+    print(len(f.value_counts()))
+    print(filt3)
+    print(filt4)
+    u=f.drop_duplicates()
+    filt5=(u['video_id']=='jY7XC5iY3ck')
+    print(len(u.loc[filt5]))
