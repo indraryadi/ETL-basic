@@ -84,7 +84,7 @@ def insert_dim_to_dwh(schema):
     channel=transform.dim_channel()
     video=transform.dim_video()
     time=transform.dim_time()
-    
+        
     try:
         print("Try insert dim category into DWH...")
         # category.to_sql('dim_category',schema=schema,con=engine,if_exists="replace",index=False)
@@ -103,11 +103,30 @@ def insert_dim_to_dwh(schema):
         print("Success !!!")
         
         print("Try insert dim time into DWH...")
-        time.to_sql('dim_time',schema=schema,con=engine,if_exists="replace",index=False)
+        # time.to_sql('dim_time',schema=schema,con=engine,if_exists="replace",index=False)
         print("Success !!!")
         # print(country)
     except (Exception) as e:
         print(e)
+
+def insert_fact_to_dwh(schema):
+    cfg=read_credentials()['postgresql_warehouse']
+    postgre_auth=PostgreSql(cfg)
+    engine,engine_conn=postgre_auth.conn(conn_type='engine')
+    
+    transform=Transform.Transform()
+    fact_video=transform.fact_video()
+    
+    try:
+        print("Try insert fact table into DWH...")
+        fact_video.to_sql('fact_video',schema=schema,con=engine,if_exists="replace",index=False)
+        print("Success !!!")
+    except (Exception) as e:
+        print(e)
+    
+
+
 if __name__=='__main__':
     # insert_raw_data_to_mysql()
-    insert_dim_to_dwh(schema='public')  
+    # insert_dim_to_dwh(schema='public')
+    insert_fact_to_dwh(schema='public')  
