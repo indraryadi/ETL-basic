@@ -135,6 +135,8 @@ def fact_video():
     df['views']=temp['views']
     df['likes']=temp['likes']
     df['dislikes']=temp['dislikes']
+    
+    df=df.drop_duplicates()
     return df
     
 
@@ -150,17 +152,21 @@ if __name__=="__main__":
     print(len(df_video))
     # print(f.sort_values(by=['video_id','id_channel','trending_date']))
     
-    filt=(f['video_id']=='jY7XC5iY3ck') #n1WpP7iowLc  
-    # print(f.loc[filt].sort_values(by='views'))
+    filt=(f['video_id']=='qD-ofY9niOs') #n1WpP7iowLc  
+    print(f.loc[filt].sort_values(by='views'))
     # print(f.loc[filt,['trending_date']].value_counts())
     # filt2=(d['video_id']=='jY7XC5iY3ck')
     # print(d.loc[filt2])
     
-    filt3=(f.value_counts()>1)
-    filt4=(filt3.value_counts())
-    print(len(f.value_counts()))
-    print(filt3)
-    print(filt4)
-    u=f.drop_duplicates()
-    filt5=(u['video_id']=='jY7XC5iY3ck')
-    print(len(u.loc[filt5]))
+    # filt3=(f.value_counts()>1)
+    # filt4=(filt3.value_counts())
+    # print(len(f.value_counts()))
+    # print(filt3)
+    # print(filt4)
+    
+    ###BOOOOYAAAAHHHHH
+    # u=f.drop_duplicates()
+    # filt5=(u['video_id']=='qD-ofY9niOs')
+    # print(len(u.loc[filt5]))
+    # print(u.loc[filt5])
+    # print(u)
