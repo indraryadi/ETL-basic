@@ -104,5 +104,37 @@ class Transform:
         # new_df['year']=pd.DataFrame(["20"+x[0:2] for x in temp])
 
         return new_df
+    
+    def fact_video(self):
+        data=Transform.df_video
 
+        column=['video_id','id_channel','id_category','country_code','trending_date','views','likes','dislikes']
+        df=pd.DataFrame(columns=column)
+        category=0
+
+        df_v=Transform.dim_video(self)
+        df_channel=Transform.dim_channel(self)
+        df_country=Transform.dim_country(self)
+        df_category=Transform.dim_category(self)
+        df_time=Transform.dim_time(self)
+        temp=data.merge(df_v,on='video_id')\
+                 .merge(df_channel,on='channel_title')\
+                 .merge(df_country,on='country_code')\
+                 .merge(df_category,on='category_id')\
+                .merge(df_time,on='trending_date')
+        # temp2=data['channel_title'].isin(df_channel['channel_title'])
+        # df['id_channel']=
+        df['video_id']=temp['video_id']
+        df['id_channel']=temp['id_channel']
+        df['country_code']=temp['country_code']
+        df['id_category']=temp['category_id']
+        df['trending_date']=temp['trending_date']
+        df['views']=temp['views']
+        df['likes']=temp['likes']
+        df['dislikes']=temp['dislikes']
+
+        df=df.drop_duplicates()
+        
+        return df
+    
     engine.dispose()
