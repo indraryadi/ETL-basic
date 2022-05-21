@@ -1,3 +1,4 @@
+#!/home/indra/project/ETL-basic/venv/bin python3.10
 from unicodedata import name
 import pandas as pd
 import numpy as np
