@@ -7,7 +7,7 @@ import sqlalchemy
 from connections.mysql import MySQL
 
 class Transform:
-    with open('credentials.json','r') as c:
+    with open('/home/indra/project/ETL-basic/dags/credentials.json','r') as c:
         credentials=json.load(c)
 
     mysql_auth=MySQL(credentials['mysql_lake'])
