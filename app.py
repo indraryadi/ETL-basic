@@ -1,3 +1,4 @@
+#!/home/indra/project/ETL-basic/venv/bin python3.10
 import json
 from unicodedata import category
 import pandas as pd
@@ -29,7 +30,7 @@ def raw_category(engine):
         df=df[['id','kind','etag','items']]
         
         print("Try insert raw category data into MySQL...")
-        df.to_sql(name='raw_category',con=engine,if_exists="replace",index=False,dtype={'id':sqlalchemy.types.JSON,'kind':sqlalchemy.types.JSON,'etag':sqlalchemy.types.JSON,'items':sqlalchemy.types.JSON})
+        df.to_sql(name='raw_category_airflow',con=engine,if_exists="replace",index=False,dtype={'id':sqlalchemy.types.JSON,'kind':sqlalchemy.types.JSON,'etag':sqlalchemy.types.JSON,'items':sqlalchemy.types.JSON})
         print("Success !!!")
     except (Exception) as e:
         print(e)
@@ -51,7 +52,7 @@ def raw_videos(engine):
             df=pd.concat([df,loopDf],axis=0)
     
         print("Try insert raw videos data into MySQL...")
-        df.to_sql(name='raw_videos',con=engine,if_exists="replace",index=False)
+        df.to_sql(name='raw_videos_airflow',con=engine,if_exists="replace",index=False)
         print("Success !!!")
     except (Exception) as e:
         print(e)
@@ -124,9 +125,10 @@ def insert_fact_to_dwh(schema):
     except (Exception) as e:
         print(e)
     
+    
 
 
 if __name__=='__main__':
-    # insert_raw_data_to_mysql()
+    insert_raw_data_to_mysql()
     # insert_dim_to_dwh(schema='public')
-    insert_fact_to_dwh(schema='public')  
+    # insert_fact_to_dwh(schema='public')  
