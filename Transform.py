@@ -1,3 +1,4 @@
+#!/home/indra/project/ETL-basic/venv/bin python3.10
 import pandas as pd
 import numpy as np
 import json
