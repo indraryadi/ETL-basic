@@ -5,7 +5,7 @@ ___
 
 ### Table of Contents
 
-- [Prepare the Dataset](prepare-the-dataset)
+- [Prepare the Dataset](#prepare-the-dataset)
 - [Design ERD](design-erd)
 - [Prepare the Data Lake and Data Warehouse](#prepare-data-lake-and-data-warehouse)
 
