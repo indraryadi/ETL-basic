@@ -14,8 +14,8 @@ class Transform:
     engine,con_engine=mysql_auth.conn()
 
 
-    df_category=pd.read_sql(sql='raw_category',con=engine)
-    df_video=pd.read_sql(sql='raw_videos',con=engine)
+    df_category=pd.read_sql(sql='raw_category_airflow',con=engine)
+    df_video=pd.read_sql(sql='raw_videos_airflow',con=engine)
 
     #TRANSFORM TO DIM CATEGORY
     def dim_category(self):
