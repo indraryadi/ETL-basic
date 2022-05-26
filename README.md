@@ -1,5 +1,8 @@
 # ETL Batch Processing
 
+<img src="https://user-images.githubusercontent.com/103250258/170396766-6c86f6d7-5c7c-47b1-b136-708a263148e2.png" width=50% height=50% align=centerme>
+
+#
 >This project is demonstrate ETL Batch Processing using pandas as a data processing and airflow as an orchestrator.The purpose of this project is to create data pipeline from raw data [Trending YouTube Video Statistics](https://www.kaggle.com/datasets/datasnaek/youtube-new) to data lake (MySQL), transform it into dim table and fact table and store it into data warehouse (postgreSQL). All the process will be scheduled to do everyday using `Airflow` as scheduler and monitoring process. For the dataset i use [Trending YouTube Video Statistics](https://www.kaggle.com/datasets/datasnaek/youtube-new) from [Kaggle](https://www.kaggle.com)</a>.
 ___
 
